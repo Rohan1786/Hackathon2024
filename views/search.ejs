@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Restaurant Finder</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Card Styles */
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center; /* Center the cards in the container */
+      padding: 20px 0;
+    }
+
+    .card {
+      position: relative;
+      width: 30%; /* Adjust width for 3 cards in a row */
+      max-width: 300px; /* Optional: set a maximum width for better responsiveness */
+      height: 380px; /* Adjusted height to accommodate the image and button */
+      background-color: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; /* Ensure space for the button */
+      padding: 12px;
+      gap: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      left: -5px;
+      margin: auto;
+      width: calc(100% + 10px); /* Adjust to the card width */
+      height: calc(100% + 10px); /* Adjusted to card height */
+      border-radius: 10px;
+      background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);
+      z-index: -10;
+      pointer-events: none;
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .card::after {
+      content: "";
+      z-index: -1;
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100%);
+      transform: translate3d(0, 0, 0) scale(0.95);
+      filter: blur(20px);
+    }
+
+    .heading {
+      font-size: 20px;
+      text-transform: capitalize;
+      font-weight: 700;
+    }
+
+    .card p:not(.heading) {
+      font-size: 14px;
+    }
+
+    .card p:last-child {
+      color: #e81cff;
+      font-weight: 600;
+    }
+
+    .card:hover::after {
+      filter: blur(30px);
+    }
+
+    .card:hover::before {
+      transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
+    }
+
+    /* Button Styles */
+    .card-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #ffae42;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      text-align: center;
+      margin-top: auto; /* Ensure the button is at the bottom */
+    }
+
+    .card-button:hover {
+      background-color: #ffca7d;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .card {
+        width: 100%; /* Full width on smaller screens */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>BROWSE THE RESTAURANTS</h1>
+    <div class="cards-container">
+      <div class="card">
+        <img src="../public/images/2.png" alt="Restaurant 1">
+        <h3 class="heading">Restaurant 1</h3>
+        <p><strong>Food Category:</strong> Italian</p>
+        <p><strong>Area Category:</strong> Downtown</p>
+        <a href="./order" class="card-button">Book Now</a>
+      </div>
+
+      <div class="card">
+        <img src="/images/3.png" alt="Restaurant 2">
+        <h3 class="heading">Restaurant 2</h3>
+        <p><strong>Food Category:</strong> Mexican</p>
+        <p><strong>Area Category:</strong> Uptown</p>
+        <a href="./order" class="card-button">Book Now</a>
+      </div>
+
+      <div class="card">
+        <img src="/images/6.png" alt="Restaurant 3">
+        <h3 class="heading">Restaurant 3</h3>
+        <p><strong>Food Category:</strong> Chinese</p>
+        <p><strong>Area Category:</strong> Midtown</p>
+        <a href="./order" class="card-button">Book Now</a>
+      </div>
+
+      <div class="card">
+        <img src="/images/2.png" alt="Restaurant 4">
+        <h3 class="heading">Restaurant 4</h3>
+        <p><strong>Food Category:</strong> Indian</p>
+        <p><strong>Area Category:</strong> Suburbs</p>
+        <a href="./order" class="card-button">Book Now</a>
+      </div>
+
+      <div class="card">
+        <img src="/images/5.png" alt="Restaurant 5">
+        <h3 class="heading">Restaurant 5</h3>
+        <p><strong>Food Category:</strong> Japanese</p>
+        <p><strong>Area Category:</strong> Downtown</p>
+        <a href="./order" class="card-button">Book Now</a>
+      </div>
+
+      <div class="card">
+        <img src="/images/6.png" alt="Restaurant 6">
+        <h3 class="heading">Restaurant 6</h3>
+        <p><strong>Food Category:</strong> Thai</p>
+        <p><strong>Area Category:</strong> Uptown</p>
+        <a href="./order" class="card-button">Book Now</a>
+      </div>
+
+      <div class="card">
+        <img src="/images/3.png" alt="Restaurant 7">
+        <h3 class="heading">Restaurant 7</h3>
+        <p><strong>Food Category:</strong> French</p>
+        <p><strong>Area Category:</strong> Suburbs</p>
+        <a href="./order" class="card-button">Book Now</a>
+      </div>
+
+      <div class="card">
+        <img src="/images/2.png" alt="Restaurant 8">
+        <h3 class="heading">Restaurant 8</h3>
+        <p><strong>Food Category:</strong> Mediterranean</p>
+        <p><strong>Area Category:</strong> Downtown</p>
+        <a href="./order" class="card-button">Book Now</a>
+      </div>
+
+      <div class="card">
+        <img src="/images/4.png" alt="Restaurant 9">
+        <h3 class="heading">Restaurant 9</h3>
+        <p><strong>Food Category:</strong> Greek</p>
+        <p><strong>Area Category:</strong> Uptown</p>
+        <a href="./order" class="card-button">Book Now</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

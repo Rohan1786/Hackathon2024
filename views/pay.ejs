@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="FileSaver.js"></script> <!-- Adjust path accordingly -->
+    <style type="text/css">
+        /* Your CSS styles here */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            color: #010f1c;
+            font-family: "Jost", sans-serif;
+        }
+
+        body {
+            background: #efefef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        section {
+            max-width: 95%;
+            max-height: 90vh;
+            width: 600px;
+            background: #fff;
+            padding: 40px;
+            overflow-y: auto;
+            border-top: 10px solid #0989ff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .flex {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex input {
+            border: none;
+            outline: none;
+            padding: 0px 20px;
+            height: 50px;
+            width: 100%;
+            border: 1px solid #e8e8e8;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button {
+            width: 100%;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            height: 50px;
+            background: #0989ff;
+            color: #fff;
+            padding: 0px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        input:focus {
+            border: 1px solid #0989ff;
+        }
+
+        button:hover {
+            background: #0870d0;
+        }
+
+        .get_qr {
+            height: 200px;
+            width: 200px;
+            border: 1px solid #999;
+            background: #efefef;
+            margin: 0 auto;
+        }
+
+        .qr_code {
+            width: 100%;
+            display: none; /* Initially hidden */
+            text-align: center;
+        }
+
+        p {
+            color: #7a7a7a;
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        .im {
+            max-width: 100%;
+            width: 150px;
+            display: block;
+            margin: 20px auto;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".pay_now").click(function() {
+                $(".qr_code").show();
+                var link = "upi://pay?pa=7204235830@axl&pn=EverGreen%20Restaurant&mc=&am=1500&tn=Payment%20for%20restaurant%20website%20download";
+                var upi = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(link);
+                console.log(upi);
+                $(".get_qr").attr("src", upi);
+                $(".pay_now").hide(); // Hide the "Pay Now" button
+                $(".transaction_form").show(); // Show the transaction input form
+            });
+
+            $(".submit_transaction").click(function() {
+                var transactionId = $(".transaction_id").val().trim();
+                if (transactionId !== "") {
+                    $(".modal").css("display", "block");
+                } else {
+                    alert("Please enter UTR/REFERENCE/TRANSACTION ID");
+                }
+            });
+
+            $(".close").click(function() {
+                $(".modal").css("display", "none");
+                $(".download_now").show(); // Show the "Download Invoice" button after closing modal
+            });
+
+            $(".download_now").click(function() {
+                var id = $(".transaction_id").val();
+                if (id !== "") {
+                    // Generate invoice content dynamically
+                    var invoiceContent = generateInvoice(id);
+                    var blob = new Blob([invoiceContent], { type: "text/plain;charset=utf-8" });
+                    saveAs(blob, "invoice.txt"); // Using FileSaver.js for compatibility across browsers
+                } else {
+                    alert("Please enter UTR/REFERENCE/TRANSACTION ID");
+                }
+            });
+
+            function generateInvoice(transactionId) {
+                // Simulate generating invoice based on transaction ID
+                var amount = "$1500"; // Replace with actual amount calculation if needed
+                var currentDate = new Date().toLocaleDateString();
+                var invoiceContent = "Invoice Details:\nTransaction ID: " + transactionId + "\nAmount: " + amount + "\nDate: " + currentDate;
+                return invoiceContent;
+            }
+        });
+
+
+        const sendMessage = () => {
+          const button = document.querySelector('.submit_transaction.m20');
+          button.addEventListener('click', async () => {
+            const message = 'Thank you! Your table has been reserved successfully';
+            try {
+              const response = await fetch('/send-sms', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message })
+              });
+              const data = await response.json();
+              if (data.success) {
+                console.log('SMS sent successfully:', data.result);
+              } else {
+                console.error('Error sending SMS:', data.error);
+              }
+            } catch (error) {
+              console.error('Error sending SMS:', error);
+            }
+          });
+        }
+    
+        document.addEventListener('DOMContentLoaded', sendMessage);
+    </script>
+</head>
+<body>
+    <section>
+        <h1>Payment</h1>
+        <div class="qr_code m20">
+            <p>Scan the QR Code with any UPI App and pay the amount then download the source code.</p>
+            <img src="" alt="QR CODE" class="get_qr m10">
+            <img src="/images/1.png" class="im">
+        </div>
+        <div class="transaction_form" style="display: none;">
+            <div class="flex m20">
+                <label for="transaction_id">Enter UTR/REFERENCE/TRANSACTION ID*</label>
+                <input type="text" id="transaction_id" name="transaction_id" class="m10 transaction_id">
+            </div>
+            <button class="submit_transaction m20" onclick="sendmessage()">Submit</button>
+        </div>
+        <button class="pay_now m20">Pay Now</button>
+    </section>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Thank you for booking! Confirmation message will be sent.</p>
+        </div>
+    </div>
+     
+</body>
+</html>
